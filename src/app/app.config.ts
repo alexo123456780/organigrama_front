@@ -21,7 +21,7 @@ export const appConfig: ApplicationConfig = {
 
         options: {
 
-        darkModeSelector: 'system',
+        darkModeSelector: false,
 
         }
 

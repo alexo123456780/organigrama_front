@@ -19,4 +19,15 @@ export class NavBarComponent {
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
+
+  routeLogin(): void{
+
+    this.router.navigate(['/login']);
+
+
+  }
+
+
+
+
 }
