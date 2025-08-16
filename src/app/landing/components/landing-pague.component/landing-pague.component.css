@@ -1,0 +1,120 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientText {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-fade-in-delay {
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fadeIn 0.8s ease-out 0.4s both;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out;
+}
+
+.animate-slide-up-delay {
+  animation: slideUp 0.6s ease-out 0.2s both;
+}
+
+.animate-slide-up-delay-2 {
+  animation: slideUp 0.6s ease-out 0.4s both;
+}
+
+.animate-gradient-text {
+  background: linear-gradient(-45deg, #4f46e5, #7c3aed, #ec4899, #4f46e5);
+  background-size: 400% 400%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientText 3s ease infinite;
+}
+
+.animate-card-1 {
+  animation: slideUp 0.6s ease-out 0.1s both;
+}
+
+.animate-card-2 {
+  animation: slideUp 0.6s ease-out 0.2s both;
+}
+
+.animate-card-3 {
+  animation: slideUp 0.6s ease-out 0.3s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-fade-in-delay,
+  .animate-fade-in-delay-2,
+  .animate-slide-up,
+  .animate-slide-up-delay,
+  .animate-slide-up-delay-2,
+  .animate-card-1,
+  .animate-card-2,
+  .animate-card-3 {
+    animation: none;
+  }
+  
+  .animate-gradient-text {
+    background: #4f46e5;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: none;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+.group:hover .group-hover\:scale-110 {
+  transform: scale(1.1);
+}
+
+.group:hover .group-hover\:text-indigo-700 {
+  color: rgb(67 56 202);
+}
+
+.group:hover .group-hover\:text-indigo-900 {
+  color: rgb(49 46 129);
+}

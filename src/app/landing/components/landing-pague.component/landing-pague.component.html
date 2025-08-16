@@ -1,0 +1,88 @@
+<div class="min-h-screen bg-gray-50">
+  <app-nav-barcomponent></app-nav-barcomponent>
+
+  <section class="py-12 sm:py-16 lg:py-20 px-4 animate-fade-in">
+    <div class="container mx-auto text-center max-w-4xl">
+      <h2 class="font-serif font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 mb-4 sm:mb-6 leading-tight animate-slide-up">
+        Gestiona tu Organización con
+        <span class="text-indigo-600 animate-gradient-text">Precisión y Elegancia</span>
+      </h2>
+      <p class="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed max-w-3xl mx-auto px-4 animate-slide-up-delay">
+        Plataforma integral para administrar la estructura organizacional de tu
+        empresa. Crea, modifica y visualiza organigramas interactivos con
+        facilidad.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center max-w-md sm:max-w-none mx-auto animate-slide-up-delay-2">
+        <p-button 
+          severity="info" 
+          label="Ver Ahora" 
+          [rounded]="true"
+          class="w-full sm:w-auto transition-all duration-300 hover:scale-105 hover:shadow-lg">
+        </p-button>
+        <p-button 
+          label="Ver Demo" 
+          [rounded]="true"
+          class="w-full sm:w-auto transition-all duration-300 hover:scale-105 hover:shadow-lg">
+        </p-button>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 sm:py-16 px-4 bg-gray-100/50 animate-fade-in-delay">
+    <div class="container mx-auto max-w-6xl">
+      <h3 class="font-serif font-bold text-2xl sm:text-3xl text-center text-gray-900 mb-8 sm:mb-12 animate-slide-up">
+        Funcionalidades Principales
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div class="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-xl hover:border-indigo-300 transition-all duration-300 cursor-pointer group animate-card-1">
+          <svg class="h-10 w-10 text-indigo-600 mb-4 group-hover:scale-110 group-hover:text-indigo-700 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+          </svg>
+          <h4 class="font-serif font-semibold text-lg sm:text-xl text-gray-900 mb-2 group-hover:text-indigo-900 transition-colors duration-300">Gestión de Puestos</h4>
+          <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
+            Crea, modifica y administra todos los puestos de tu organización con formularios intuitivos.
+          </p>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-xl hover:border-indigo-300 transition-all duration-300 cursor-pointer group animate-card-2">
+          <svg class="h-10 w-10 text-indigo-600 mb-4 group-hover:scale-110 group-hover:text-indigo-700 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+          <h4 class="font-serif font-semibold text-lg sm:text-xl text-gray-900 mb-2 group-hover:text-indigo-900 transition-colors duration-300">Organigrama Interactivo</h4>
+          <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
+            Visualiza la estructura jerárquica con gráficos dinámicos tipo árbol, expandibles y navegables.
+          </p>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-xl hover:border-indigo-300 transition-all duration-300 cursor-pointer group animate-card-3">
+          <svg class="h-10 w-10 text-indigo-600 mb-4 group-hover:scale-110 group-hover:text-indigo-700 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+          </svg>
+          <h4 class="font-serif font-semibold text-lg sm:text-xl text-gray-900 mb-2 group-hover:text-indigo-900 transition-colors duration-300">Relaciones Jerárquicas</h4>
+          <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
+            Define y gestiona las relaciones entre puestos con validaciones automáticas para evitar ciclos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-12 sm:py-16 px-4 animate-fade-in-delay-2">
+    <div class="container mx-auto text-center max-w-3xl">
+      <h3 class="font-serif font-bold text-2xl sm:text-3xl text-gray-900 mb-6 sm:mb-8 animate-slide-up">¿Listo para Optimizar tu Organización?</h3>
+      <p class="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 leading-relaxed animate-slide-up-delay">Comienza a gestionar tu estructura organizacional de manera más eficiente y profesional.</p>
+      <div class="animate-slide-up-delay-2">
+        <p-button 
+          severity="info" 
+          label="Comenzar Ahora" 
+          [rounded]="true"
+          size="large"
+          class="transition-all duration-300 hover:scale-105 hover:shadow-lg">
+        </p-button>
+      </div>
+    </div>
+  </section>
+
+  <app-footercomponent></app-footercomponent>
+
+</div>
