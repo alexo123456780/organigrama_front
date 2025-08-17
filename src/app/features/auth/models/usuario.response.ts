@@ -2,7 +2,8 @@ import { Usuario } from "./usuario";
 
 export interface UsuarioResponse{
 
-    data: Usuario
+    access_token: string;
+    data: Usuario;
 
 
 }

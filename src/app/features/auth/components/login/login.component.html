@@ -1,1 +1,181 @@
-<p>login.component works!</p>
+<div class="min-h-screen flex">
+  <div
+    class="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-cyan-600 to-cyan-700 relative overflow-hidden"
+  >
+    <div class="absolute inset-0 bg-black/10"></div>
+    <div class="relative z-10 flex flex-col justify-between p-12 text-white">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+          <i [ngClass]="iconos.organizacion" style="font-size: 1.6rem"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold">Organigrama Empresarial</h1>
+          <p class="text-white/80 text-sm">Test</p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="space-y-4">
+          <h2 class="text-4xl font-bold leading-tight">Bienvenido de vuelta</h2>
+          <p class="text-xl text-white/90 leading-relaxed">
+            Accede a un organigrama empresarial completo
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+            <i [ngClass]="iconos.organizacion" style="font-size: 1.5rem"></i>
+
+            <span class="text-white/90">Gestión Completa</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-white/60 text-sm">2025 Organigrama Prueba</div>
+    </div>
+
+    <div
+      class="absolute top-20 right-20 w-32 h-32 bg-emerald-300/20 rounded-full blur-3xl"
+    ></div>
+    <div
+      class="absolute bottom-20 left-20 w-24 h-24 bg-white/10 rounded-full blur-2xl"
+    ></div>
+  </div>
+
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
+    <div class="w-full max-w-md space-y-8">
+      <div class="lg:hidden text-center">
+        <div class="inline-flex items-center gap-3 mb-6">
+          <div class="p-2 bg-cyan-600/10 rounded-lg">
+            <svg
+              class="h-8 w-8 text-cyan-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              ></path>
+            </svg>
+          </div>
+          <div class="text-left">
+            <h1 class="text-2xl font-bold text-gray-900">Organigrama</h1>
+            <p class="text-gray-600 text-sm">Plataforma Empresarial</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center lg:text-left space-y-2">
+        <h2 class="text-3xl font-bold text-gray-900">Iniciar Sesión</h2>
+        <p class="text-gray-600">
+          Ingresa tus credenciales para acceder a tu cuenta
+        </p>
+      </div>
+
+      <div class="bg-white border border-gray-200/50 rounded-lg shadow-lg">
+        <div class="p-8">
+          <form
+            class="space-y-6"
+            [formGroup]="formularioLogin"
+            (ngSubmit)="login()"
+          >
+            <div class="space-y-2">
+              <p-float-label variant="on">
+                <p-iconfield>
+                  <p-inputicon [ngClass]="iconos.icono_usuario" />
+
+                  <input
+                    type="text"
+                    formControlName="userName"
+                    id="user-name"
+                    pInputText
+                    class="w-full"
+                  />
+                </p-iconfield>
+
+                <label for="user-name">Nombre de Usuario</label>
+              </p-float-label>
+
+              @if(formularioLogin.get('userName')?.invalid &&
+              formularioLogin.get('userName')?.touched){
+
+              <div class="pt-2">
+                @if(formularioLogin.get('userName')?.errors?.['required'] ){
+
+                <p-message severity="error" icon="{{ iconos.error }}">
+                  Este campo es obligatorio
+                </p-message>
+
+                } @if(formularioLogin.get('userName')?.errors?.['maxlength'] ){
+
+                <p-message icon="{{ iconos.error }}" severity="error">
+                  Has sobrepasado el maximo de caracteres
+                </p-message>
+
+                }
+              </div>
+              }
+            </div>
+
+            <div class="space-y-2">
+              <p-float-label variant="on">
+                <p-password
+                  [toggleMask]="true"
+                  promptLabel="Escribe tu password"
+                  formControlName="password"
+                  id="password"
+                  inputStyleClass="w-full"
+                  class="w-full"
+                >
+                </p-password>
+
+                <label for="password">Password</label>
+              </p-float-label>
+
+              @if(formularioLogin.get('password')?.invalid &&
+              formularioLogin.get('password')?.touched){
+
+              <div class="pt-2">
+                @if(formularioLogin.get('password')?.errors?.['required'] ){
+
+                <p-message severity="error" icon="{{ iconos.error }}">
+                  Este campo es obligatorio
+                </p-message>
+
+                } @if(formularioLogin.get('password')?.errors?.['minlength'] ){
+
+                <p-message icon="{{ iconos.error }}" severity="error">
+                  Ingresa al menos 4 caracteres para el password
+                </p-message>
+
+                }
+              </div>
+              }
+            </div>
+            <p-button
+              label="Iniciar Sesion"
+              [disabled]="estaCargando || formularioLogin.invalid"
+              class="flex items-center justify-center"
+              type="submit"
+            >
+            </p-button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-spinnercomponent [estaCargando]="estaCargando" />
+@if(mensajeErroneo$ | async; as mensajeErroneo ) {
+
+<app-modal-errorcomponent [mensajeErroneo]="mensajeErroneo" />
+
+} @if (mensajeExitoso$ | async; as mensajeExitoso) {
+
+<app-modal-exitocomponent [mensajeExitoso]="mensajeExitoso" />
+
+}
