@@ -1,0 +1,481 @@
+/* Organigrama Chart - Estilos Profesionales */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.organigrama-chart-wrapper {
+  width: 100%;
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #fafbfc;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Controles del Chart */
+.chart-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.control-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.control-btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.control-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.expand-btn:hover {
+  background: #ecfdf5;
+  border-color: #10b981;
+  color: #059669;
+}
+
+.collapse-btn:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #dc2626;
+}
+
+.center-btn:hover {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #2563eb;
+}
+
+.control-btn i {
+  font-size: 1rem;
+}
+
+.chart-info {
+  display: flex;
+  align-items: center;
+}
+
+.info-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+.info-text i {
+  color: #3b82f6;
+}
+
+/* Contenedor del Chart */
+.chart-container {
+  width: 100%;
+  height: 600px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-container.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estado Vacío */
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+}
+
+.empty-content {
+  max-width: 400px;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: #d1d5db;
+  margin-bottom: 1.5rem;
+}
+
+.empty-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.75rem;
+}
+
+.empty-description {
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Leyenda */
+.chart-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.legend-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.legend-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.legend-title i {
+  color: #3b82f6;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: #f9fafb;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.legend-item:hover {
+  background: #f3f4f6;
+}
+
+.legend-color {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.legend-item.level-1 .legend-color {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.legend-item.level-2 .legend-color {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.legend-item.level-3 .legend-color {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.legend-item.level-4 .legend-color {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+}
+
+.legend-status {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.legend-status.active {
+  background: #10b981;
+}
+
+.legend-status.inactive {
+  background: #ef4444;
+}
+
+.legend-item span {
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Estilos SVG para D3.js */
+:host ::ng-deep .node {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+:host ::ng-deep .node:hover {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+:host ::ng-deep .node-rect {
+  fill: #ffffff;
+  stroke: #e5e7eb;
+  stroke-width: 2;
+  transition: all 0.3s ease;
+}
+
+:host ::ng-deep .node-rect.active.level-1 {
+  fill: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  stroke: #f59e0b;
+}
+
+:host ::ng-deep .node-rect.active.level-2 {
+  fill: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  stroke: #3b82f6;
+}
+
+:host ::ng-deep .node-rect.active.level-3 {
+  fill: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  stroke: #10b981;
+}
+
+:host ::ng-deep .node-rect.active.level-4 {
+  fill: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  stroke: #6b7280;
+}
+
+:host ::ng-deep .node-rect.inactive {
+  fill: #fef2f2;
+  stroke: #ef4444;
+  opacity: 0.7;
+}
+
+:host ::ng-deep .node-icon {
+  fill: #4f46e5;
+  font-weight: 600;
+}
+
+:host ::ng-deep .node-title {
+  fill: #111827;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+:host ::ng-deep .node-area {
+  fill: #6b7280;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  text-anchor: middle;
+}
+
+:host ::ng-deep .level-badge {
+  fill: #4f46e5;
+}
+
+:host ::ng-deep .level-text {
+  fill: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+:host ::ng-deep .collapse-indicator {
+  fill: #3b82f6;
+  stroke: #ffffff;
+  stroke-width: 2;
+  cursor: pointer;
+}
+
+:host ::ng-deep .collapse-indicator:hover {
+  fill: #2563eb;
+}
+
+:host ::ng-deep .collapse-text {
+  fill: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+:host ::ng-deep .link {
+  fill: none;
+  stroke: #9ca3af;
+  stroke-width: 2;
+  stroke-opacity: 0.8;
+}
+
+:host ::ng-deep .link:hover {
+  stroke: #6b7280;
+  stroke-width: 3;
+}
+
+/* Tooltip Global */
+:host ::ng-deep .organigrama-tooltip {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.4;
+  max-width: 250px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .chart-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .control-buttons {
+    justify-content: center;
+  }
+  
+  .chart-info {
+    justify-content: center;
+  }
+  
+  .chart-container {
+    height: 500px;
+  }
+  
+  .chart-legend {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .organigrama-chart-wrapper {
+    border-radius: 8px;
+  }
+  
+  .chart-controls {
+    padding: 1rem;
+  }
+  
+  .control-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  .control-btn span {
+    display: none;
+  }
+  
+  .chart-container {
+    height: 400px;
+  }
+  
+  .chart-legend {
+    padding: 1rem;
+  }
+  
+  .info-text {
+    font-size: 0.8rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .chart-controls {
+    padding: 0.75rem;
+  }
+  
+  .control-buttons {
+    gap: 0.5rem;
+  }
+  
+  .control-btn {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .chart-container {
+    height: 350px;
+  }
+  
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+  
+  .empty-icon {
+    font-size: 3rem;
+  }
+  
+  .empty-title {
+    font-size: 1.25rem;
+  }
+  
+  .empty-description {
+    font-size: 0.875rem;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.organigrama-chart-wrapper {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Scrollbar personalizado para contenedores con scroll */
+.chart-container::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.chart-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.chart-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.chart-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

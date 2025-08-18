@@ -14,6 +14,14 @@
         </div>
         
         <div class="header-actions">
+          <p-button 
+            [label]="viewMode === 'tree' ? 'Vista Gráfica' : 'Vista Lista'" 
+            [icon]="viewMode === 'tree' ? 'pi pi-sitemap' : 'pi pi-list'" 
+            class="p-button-outlined" 
+            (onClick)="toggleViewMode()"
+            pTooltip="Alternar entre vista de lista y vista gráfica">
+          </p-button>
+          
           @if (userRole === UserRole.Administrador || userRole === UserRole.Editor) {
             <p-button 
               label="Ir al Dashboard" 
@@ -31,13 +39,21 @@
       </div>
     </div>
 
-    <app-organigrama-view
-      [readonly]="isReadonly"
-      [showActions]="!isReadonly"
-      (editPuesto)="onEditPuesto($event)"
-      (deletePuesto)="onDeletePuesto($event)"
-      (addSubordinado)="onAddSubordinado($event)">
-    </app-organigrama-view>
+    @if (viewMode === 'tree') {
+      <app-organigrama-view
+        [readonly]="isReadonly"
+        [showActions]="!isReadonly"
+        (editPuesto)="onEditPuesto($event)"
+        (deletePuesto)="onDeletePuesto($event)"
+        (addSubordinado)="onAddSubordinado($event)">
+      </app-organigrama-view>
+    }
+    
+    @if (viewMode === 'chart') {
+      <app-organigrama-chart
+        [data]="puestosData">
+      </app-organigrama-chart>
+    }
 
     @if (userRole === UserRole.Viewer) {
       <div class="viewer-info-section">

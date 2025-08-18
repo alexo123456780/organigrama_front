@@ -85,15 +85,20 @@ export class PuestosService {
 
   // Obtener organigrama estructurado
   getOrganigrama(): Observable<Puesto[]> {
-    return this.http.get<any[]>(`${this.API_URL}/${API_KEYS.PUESTOS.ORGANIGRAMA}`)
+    // Intentamos primero con el endpoint específico de organigrama
+    const organigramaUrl = `${this.API_URL}/${API_KEYS.PUESTOS.ORGANIGRAMA}`;
+    const generalUrl = `${this.API_URL}/${API_KEYS.PUESTOS.GET_ALL}`;
+    
+    return this.http.get<any[]>(generalUrl)
       .pipe(
-        timeout(15000), // Mayor timeout para organigrama completo
+        timeout(15000),
         retry(2),
         map(response => {
           if (!Array.isArray(response)) {
             throw new Error('Error al cargar el organigrama');
           }
-          return response.map(puesto => this.transformPuestoFromBackend(puesto));
+          const transformedData = response.map(puesto => this.transformPuestoFromBackend(puesto));
+          return transformedData;
         })
       );
   }

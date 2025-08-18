@@ -6,9 +6,11 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { NavBarComponent } from '../../landing/layouts/components/nav-bar/nav-bar.component';
 import { FooterComponent } from '../../landing/layouts/components/footer/footer.component';
 import { OrganigramaViewComponent } from './components/organigrama-view/organigrama-view.component';
+import { OrganigramaChartComponent } from './components/organigrama-chart/organigrama-chart.component';
 import { PuestosService } from './services/puestos.service';
 import { LoginService } from '../auth/services/login.service';
 import { Puesto } from './models/puesto.model';
@@ -22,9 +24,11 @@ import { UserRole } from '../auth/models/usuario';
     ToastModule,
     ConfirmDialogModule,
     ButtonModule,
+    TooltipModule,
     NavBarComponent,
     FooterComponent,
-    OrganigramaViewComponent
+    OrganigramaViewComponent,
+    OrganigramaChartComponent
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './organigrama.component.html',
@@ -34,6 +38,8 @@ export class OrganigramaComponent implements OnInit {
   userRole: UserRole | null = null;
   isReadonly: boolean = false;
   UserRole = UserRole; // Para usar en el template
+  viewMode: 'tree' | 'chart' = 'chart'; // Vista por defecto: gráfica
+  puestosData: Puesto[] = [];
 
   constructor(
     private router: Router,
@@ -46,6 +52,26 @@ export class OrganigramaComponent implements OnInit {
   ngOnInit(): void {
     this.userRole = this.loginService.getUserRole();
     this.isReadonly = this.userRole === UserRole.Viewer;
+    this.loadPuestosData();
+  }
+
+  loadPuestosData(): void {
+    this.puestosService.getOrganigrama().subscribe({
+      next: (puestos) => {
+        this.puestosData = puestos;
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al cargar los datos del organigrama'
+        });
+      }
+    });
+  }
+
+  toggleViewMode(): void {
+    this.viewMode = this.viewMode === 'tree' ? 'chart' : 'tree';
   }
 
   onEditPuesto(puesto: Puesto): void {

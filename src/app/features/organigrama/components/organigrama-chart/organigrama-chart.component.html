@@ -1,0 +1,97 @@
+<div class="organigrama-chart-wrapper">
+  <div class="chart-controls" *ngIf="data.length > 0">
+    <div class="control-buttons">
+      <button 
+        class="control-btn expand-btn"
+        (click)="expandAll()"
+        title="Expandir todos los nodos">
+        <i class="pi pi-plus-circle"></i>
+        <span>Expandir Todo</span>
+      </button>
+      
+      <button 
+        class="control-btn collapse-btn"
+        (click)="collapseAll()"
+        title="Contraer todos los nodos">
+        <i class="pi pi-minus-circle"></i>
+        <span>Contraer Todo</span>
+      </button>
+      
+      <button 
+        class="control-btn center-btn"
+        (click)="centerChart()"
+        title="Centrar organigrama">
+        <i class="pi pi-search-plus"></i>
+        <span>Centrar</span>
+      </button>
+    </div>
+    
+    <div class="chart-info">
+      <span class="info-text">
+        <i class="pi pi-info-circle"></i>
+        Haz clic en los nodos para expandir/contraer. Usa la rueda del mouse para hacer zoom.
+      </span>
+    </div>
+  </div>
+  
+  <div 
+    #chartContainer 
+    class="chart-container"
+    [class.empty]="data.length === 0">
+    
+    <div *ngIf="data.length === 0" class="empty-state">
+      <div class="empty-content">
+        <i class="pi pi-sitemap empty-icon"></i>
+        <h3 class="empty-title">No hay datos del organigrama</h3>
+        <p class="empty-description">
+          Aún no se han creado puestos en la organización.
+          Agrega puestos para visualizar la estructura jerárquica.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="chart-legend" *ngIf="data.length > 0">
+    <div class="legend-section">
+      <h4 class="legend-title">
+        <i class="pi pi-palette"></i>
+        Niveles Jerárquicos
+      </h4>
+      <div class="legend-items">
+        <div class="legend-item level-1">
+          <div class="legend-color"></div>
+          <span>Nivel 1 - Directivo</span>
+        </div>
+        <div class="legend-item level-2">
+          <div class="legend-color"></div>
+          <span>Nivel 2 - Gerencial</span>
+        </div>
+        <div class="legend-item level-3">
+          <div class="legend-color"></div>
+          <span>Nivel 3 - Supervisión</span>
+        </div>
+        <div class="legend-item level-4">
+          <div class="legend-color"></div>
+          <span>Nivel 4+ - Operativo</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="legend-section">
+      <h4 class="legend-title">
+        <i class="pi pi-circle"></i>
+        Estados
+      </h4>
+      <div class="legend-items">
+        <div class="legend-item active">
+          <div class="legend-status active"></div>
+          <span>Puesto Activo</span>
+        </div>
+        <div class="legend-item inactive">
+          <div class="legend-status inactive"></div>
+          <span>Puesto Inactivo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
