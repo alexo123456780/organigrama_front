@@ -238,7 +238,6 @@
   text-transform: uppercase;
 }
 
-/* Toolbar Styles - Diseño Profesional */
 .p-toolbar {
   padding: 1.25rem 1.5rem;
   display: flex;
@@ -561,7 +560,6 @@
 }
 
 
-/* Table Header */
 .table-header {
   display: flex;
   justify-content: space-between;

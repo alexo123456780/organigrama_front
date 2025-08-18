@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { TreeModule } from 'primeng/tree';
+import { TooltipModule } from 'primeng/tooltip';
 import { TreeNode } from 'primeng/api';
 import { PuestosService } from '../../services/puestos.service';
+import { Puesto } from '../../models/puesto.model';
 import { NavBarComponent } from '../../../../landing/layouts/components/nav-bar/nav-bar.component';
 import { FooterComponent } from '../../../../landing/layouts/components/footer/footer.component';
+import { OrganigramaChartComponent } from '../organigrama-chart/organigrama-chart.component';
 
 @Component({
   selector: 'app-demo-view',
@@ -16,8 +19,10 @@ import { FooterComponent } from '../../../../landing/layouts/components/footer/f
     CardModule,
     ButtonModule,
     TreeModule,
+    TooltipModule,
     NavBarComponent,
-    FooterComponent
+    FooterComponent,
+    OrganigramaChartComponent
   ],
   templateUrl: './demo-view.component.html',
   styleUrls: ['./demo-view.component.css']
@@ -25,8 +30,10 @@ import { FooterComponent } from '../../../../landing/layouts/components/footer/f
 export class DemoViewComponent implements OnInit {
 
   organigramaData: TreeNode[] = [];
+  puestosData: Puesto[] = [];
   loading = true;
   selectedNode: TreeNode | null = null;
+  viewMode: 'tree' | 'chart' = 'chart'; // Vista por defecto: gráfica
 
   constructor(private puestosService: PuestosService) {}
 
@@ -38,14 +45,18 @@ export class DemoViewComponent implements OnInit {
     this.loading = true;
     this.puestosService.getOrganigrama().subscribe({
       next: (data) => {
+        this.puestosData = data;
         this.organigramaData = this.transformToTreeNodes(data);
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar organigrama:', error);
         this.loading = false;
       }
     });
+  }
+
+  toggleViewMode(): void {
+    this.viewMode = this.viewMode === 'tree' ? 'chart' : 'tree';
   }
 
   private transformToTreeNodes(puestos: any[]): TreeNode[] {

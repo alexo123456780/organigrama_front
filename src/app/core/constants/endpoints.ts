@@ -2,7 +2,6 @@ export const API_KEYS = {
 
     AUTH: {
         LOGIN: 'auth/login',
-        REGISTRO: 'auth/registro',
         VERIFICAR_TOKEN: 'auth/verificar-token',
         USUARIOS: 'auth/usuarios'
     },

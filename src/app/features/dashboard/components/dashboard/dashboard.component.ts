@@ -158,7 +158,7 @@ export class DashboardComponent implements OnInit {
         this.areaOptions = areas.map(area => ({ label: area, value: area }));
       },
       error: (error) => {
-        // Si no existe el endpoint, usar áreas predefinidas
+        // Si no existe el endpoint, usar areas predefinidas
         this.areaOptions = [
           { label: 'Dirección General', value: 'Dirección General' },
           { label: 'Recursos Humanos', value: 'Recursos Humanos' },
@@ -237,7 +237,6 @@ export class DashboardComponent implements OnInit {
   }
 
   savePuesto(): void {
-    // Limpiar espacios en blanco
     this.validationService.trimFormValues(this.puestoForm, ['nombre', 'descripcion', 'area_departamento']);
     
     const validation = this.validationService.validateForm(this.puestoForm);
@@ -266,7 +265,6 @@ export class DashboardComponent implements OnInit {
           this.loadPuestos();
         },
         error: () => {
-          // El error ya se maneja en el interceptor
         }
       });
     } else {
@@ -282,7 +280,6 @@ export class DashboardComponent implements OnInit {
           this.loadPuestos();
         },
         error: () => {
-          // El error ya se maneja en el interceptor
         }
       });
     }
@@ -319,4 +316,6 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/landing']);
   }
 
+
+  
 }

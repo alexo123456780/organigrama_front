@@ -6,6 +6,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 import { Iconos } from '../../../../shared/iconos';
 import { LoginService } from '../../services/login.service';
 import { LoginRequest } from '../../models/usuario.request';
@@ -13,10 +15,9 @@ import { NotificationService } from '../../../../core/services/notification.serv
 import { UserRole } from '../../models/usuario';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { MessageModule } from 'primeng/message';
-import { Password, PasswordModule } from "primeng/password";
+import { PasswordModule } from "primeng/password";
 import { SpinnerComponent } from "../../../../shared/components/spinner/spinner.component";
-import { ModalErrorComponent } from "../../../../shared/components/modal-error/modal-error.component";
-import { ModalExitoComponent } from '../../../../shared/components/modal-exito/modal-exito.component';
+
 import { ValidationService } from '../../../../core/services/validation.service';
 import { CustomValidators } from '../../../../core/validators/custom-validators';
 
@@ -36,7 +37,9 @@ import { CustomValidators } from '../../../../core/validators/custom-validators'
     MessageModule,
     PasswordModule,
     SpinnerComponent,
+    ToastModule,
 ],
+  providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -48,6 +51,7 @@ export class LoginComponent {
   formularioLogin: FormGroup;
 
   private notificationService = inject(NotificationService);
+  private messageService = inject(MessageService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private validationService = inject(ValidationService);
@@ -83,7 +87,12 @@ export class LoginComponent {
     const validation = this.validationService.validateForm(this.formularioLogin);
     
     if (!validation.isValid && validation.firstError) {
-      this.notificationService.error(validation.firstError.message);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error de validación',
+        detail: validation.firstError.message,
+        life: 4000
+      });
       return false;
     }
     
@@ -92,7 +101,6 @@ export class LoginComponent {
   }
 
   login(): void {
-    // Limpiar espacios en blanco
     this.validationService.trimFormValues(this.formularioLogin, ['userName', 'password']);
     
     if (!this.validarFormulario()) return;
@@ -108,23 +116,42 @@ export class LoginComponent {
           const userRole = this.loginService.getUserRole();
           const userName = this.loginService.getUserName();
           
-          this.notificationService.success(
-            `¡Bienvenido ${userName}! Accediendo como ${userRole}...`
-          );
+          this.messageService.add({
+            severity: 'success',
+            summary: '¡Éxito!',
+            detail: `¡Bienvenido ${userName}! Accediendo como ${userRole}...`,
+            life: 3000
+          });
 
           setTimeout(() => {
             this.redirectBasedOnRole(userRole);
           }, 1500);
         },
-        error: () => {
-          // El error ya se maneja en el interceptor
+        error: (error) => {
           this.estaCargando = false;
+          
+          let errorMessage = 'Error al iniciar sesión. Intenta nuevamente.';
+          
+          // Manejar errores específicos de login
+          if (error.status === 401) {
+            errorMessage = 'Credenciales inválidas. Verifica tu usuario y contraseña.';
+          } else if (error.status === 422) {
+            errorMessage = 'Datos de login no válidos.';
+          } else if (error.status === 0) {
+            errorMessage = 'Sin conexión al servidor. Verifica tu conexión a internet.';
+          }
+          
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: errorMessage,
+            life: 5000
+          });
         }
       });
     }
   }
 
-  // Método para redirección inteligente basada en roles
   private redirectBasedOnRole(userRole: string | null): void {
     switch (userRole) {
       case 'admin':

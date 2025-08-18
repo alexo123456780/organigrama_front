@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { RoleGuard } from './core/guards/role.guard';
 import { UserRole } from './features/auth/models/usuario';
-import { RegistroComponent } from './features/auth/components/registro/registro.component';
 
 export const routes: Routes = [
 
@@ -35,11 +34,6 @@ export const routes: Routes = [
         loadComponent: () => import('./features/organigrama/organigrama.component').then(m => m.OrganigramaComponent),
         canActivate: [RoleGuard],
         data: { allowedRoles: [UserRole.Administrador, UserRole.Editor, UserRole.Viewer] }
-    },
-
-    {
-        path:'registro',
-        component: RegistroComponent,
     },
 
 

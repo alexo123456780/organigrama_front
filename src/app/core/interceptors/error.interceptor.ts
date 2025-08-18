@@ -23,9 +23,17 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   private handleError(error: HttpErrorResponse, req: HttpRequest<any>): Observable<never> {
-    // Manejar errores de autenticación
-    if (this.errorHandler.requiresReauth(error)) {
+    // No manejar errores 401 en la ruta de login para permitir manejo específico
+    const isLoginRequest = req.url.includes('/auth/login');
+    
+    // Manejar errores de autenticación solo si no es una petición de login
+    if (this.errorHandler.requiresReauth(error) && !isLoginRequest) {
       this.handleUnauthorized();
+    }
+    
+    // Para peticiones de login, solo devolver el error sin mostrar notificación
+    if (isLoginRequest) {
+      return throwError(() => error);
     }
     
     // Delegar el manejo del error al servicio especializado

@@ -6,11 +6,3 @@ export interface LoginRequest{
     password: string;
 
 }
-
-export interface RegistroRequest{
-
-    userName: string;
-    password: string;
-    rol?: UserRole | UserRole.Viewer
-
-}

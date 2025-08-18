@@ -16,17 +16,14 @@ export class FormValidationGuard implements CanDeactivate<CanComponentDeactivate
     component: CanComponentDeactivate
   ): Observable<boolean> | Promise<boolean> | boolean {
     
-    // Si el componente no implementa hasUnsavedChanges, permitir navegación
     if (!component.hasUnsavedChanges) {
       return true;
     }
 
-    // Si no hay cambios sin guardar, permitir navegación
     if (!component.hasUnsavedChanges()) {
       return true;
     }
 
-    // Si hay cambios sin guardar, preguntar al usuario
     return this.confirmNavigation();
   }
 

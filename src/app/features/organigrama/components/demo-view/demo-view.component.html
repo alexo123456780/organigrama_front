@@ -3,49 +3,57 @@
 <div class="min-h-screen bg-gray-50 py-8">
   <div class="container mx-auto px-4">
     
-    <!-- Header -->
     <div class="text-center mb-8">
       <h1 class="text-4xl font-bold text-gray-800 mb-4">Vista Demo - Organigrama</h1>
       <p class="text-lg text-gray-600">Explora la estructura organizacional de la empresa</p>
     </div>
 
-    <!-- Controles -->
     <div class="flex justify-center gap-4 mb-6">
       <p-button 
-        label="Expandir Todo" 
-        icon="pi pi-plus" 
-        (onClick)="expandAll()"
-        class="p-button-outlined">
+        [label]="viewMode === 'tree' ? 'Vista Gráfica' : 'Vista Lista'" 
+        [icon]="viewMode === 'tree' ? 'pi pi-sitemap' : 'pi pi-list'" 
+        class="p-button-outlined" 
+        (onClick)="toggleViewMode()"
+        pTooltip="Alternar entre vista de lista y vista gráfica">
       </p-button>
-      <p-button 
-        label="Contraer Todo" 
-        icon="pi pi-minus" 
-        (onClick)="collapseAll()"
-        class="p-button-outlined">
-      </p-button>
+      
+      @if (viewMode === 'tree') {
+        <p-button 
+          label="Expandir Todo" 
+          icon="pi pi-plus" 
+          (onClick)="expandAll()"
+          class="p-button-outlined">
+        </p-button>
+        <p-button 
+          label="Contraer Todo" 
+          icon="pi pi-minus" 
+          (onClick)="collapseAll()"
+          class="p-button-outlined">
+        </p-button>
+      }
     </div>
 
-    <!-- Organigrama -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
-      <!-- Árbol del Organigrama -->
-      <div class="lg:col-span-2">
-        <p-card header="Estructura Organizacional" class="h-full">
-          <div class="organigrama-container" style="max-height: 600px; overflow-y: auto;">
-            <p-tree 
-              [value]="organigramaData" 
-              [loading]="loading"
-              selectionMode="single"
-              [(selection)]="selectedNode"
-              (onNodeSelect)="onNodeSelect($event)"
-              class="w-full">
-            </p-tree>
-          </div>
-        </p-card>
-      </div>
+    @if (viewMode === 'tree') {
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Árbol del Organigrama -->
+        <div class="lg:col-span-2">
+          <p-card header="Estructura Organizacional" class="h-full">
+            <div class="organigrama-container" style="max-height: 600px; overflow-y: auto;">
+              <p-tree 
+                [value]="organigramaData" 
+                [loading]="loading"
+                selectionMode="single"
+                [(selection)]="selectedNode"
+                (onNodeSelect)="onNodeSelect($event)"
+                class="w-full">
+              </p-tree>
+            </div>
+          </p-card>
+        </div>
 
-      <!-- Detalles del Puesto Seleccionado -->
-      <div class="lg:col-span-1">
+        <!-- Detalles del Puesto Seleccionado -->
+        <div class="lg:col-span-1">
         <p-card header="Detalles del Puesto" class="h-full">
           @if (selectedNode) {
           <div class="space-y-4">
@@ -93,20 +101,25 @@
         </p-card>
       </div>
     </div>
+    }
+    
+    @if (viewMode === 'chart') {
+      <div class="chart-container">
+        <p-card header="Organigrama Gráfico" class="h-full">
+          <app-organigrama-chart
+            [data]="puestosData">
+          </app-organigrama-chart>
+        </p-card>
+      </div>
+    }
 
-    <!-- Información adicional -->
     <div class="mt-8">
       <p-card>
         <div class="text-center">
-          <h3 class="text-xl font-semibold text-gray-800 mb-2">¿Necesitas más acceso?</h3>
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">Vista de Solo Lectura</h3>
           <p class="text-gray-600 mb-4">
-            Esta es una vista de solo lectura. Para gestionar el organigrama, contacta al administrador.
+            Estás explorando el organigrama en modo demo. Esta vista es de solo lectura y no permite realizar modificaciones.
           </p>
-          <p-button 
-            label="Contactar Administrador" 
-            icon="pi pi-envelope" 
-            class="p-button-outlined">
-          </p-button>
         </div>
       </p-card>
     </div>
