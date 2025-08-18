@@ -1,0 +1,275 @@
+<div class="organigrama-container">
+  
+  <div class="organigrama-header mb-6">
+    <div class="flex justify-between items-center">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Organigrama Empresarial</h2>
+        <p class="text-gray-600">Estructura jerárquica de la organización</p>
+      </div>
+      
+      <div class="flex gap-3">
+        <p-button 
+          label="Expandir Todo" 
+          icon="pi pi-plus-circle" 
+          class="p-button-outlined p-button-sm"
+          (onClick)="expandAll()"
+          pTooltip="Expandir todos los nodos">
+        </p-button>
+        
+        <p-button 
+          label="Contraer Todo" 
+          icon="pi pi-minus-circle" 
+          class="p-button-outlined p-button-sm"
+          (onClick)="collapseAll()"
+          pTooltip="Contraer todos los nodos">
+        </p-button>
+        
+        <p-button 
+          icon="pi pi-refresh" 
+          class="p-button-outlined p-button-sm"
+          (onClick)="refreshOrganigrama()"
+          pTooltip="Actualizar organigrama">
+        </p-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    
+    <div class="lg:col-span-2">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-2 p-4">
+            <i class="pi pi-sitemap text-xl text-blue-600"></i>
+            <span class="font-semibold text-lg">Estructura Organizacional</span>
+          </div>
+        </ng-template>
+        
+        <div class="organigrama-tree-container">
+          @if (loading) {
+          <div class="loading-container">
+            <div class="flex flex-col gap-4">
+              <p-skeleton height="2rem" class="mb-2"></p-skeleton>
+              <div class="ml-4">
+                <p-skeleton height="1.5rem" class="mb-2"></p-skeleton>
+                <div class="ml-4">
+                  <p-skeleton height="1.5rem" class="mb-2"></p-skeleton>
+                  <p-skeleton height="1.5rem" class="mb-2"></p-skeleton>
+                </div>
+              </div>
+              <div class="ml-4">
+                <p-skeleton height="1.5rem" class="mb-2"></p-skeleton>
+                <p-skeleton height="1.5rem" class="mb-2"></p-skeleton>
+              </div>
+            </div>
+          </div>
+          }
+          
+          @if (!loading) {
+          <p-tree
+            [value]="organigramaData"
+            selectionMode="single"
+            [(selection)]="selectedNode"
+            (onNodeSelect)="onNodeSelect($event)"
+            (onNodeUnselect)="onNodeUnselect()"
+            (onNodeExpand)="onNodeExpand($event)"
+            (onNodeCollapse)="onNodeCollapse($event)"
+            [style]="{'width': '100%'}"
+            class="organigrama-tree">
+            
+            <ng-template let-node pTemplate="default">
+              <div class="tree-node-content" 
+                   [class.selected]="selectedNode?.key === node.key"
+                   [class.node-active]="node.data.status === 'activo'"
+                   [class.node-inactive]="node.data.status === 'inactivo'">
+                
+                <div class="node-header">
+                  <i [class]="node.icon" class="node-icon"></i>
+                  <span class="node-title">{{ node.label }}</span>
+                  <span class="level-badge">{{ getLevelLabel(node.data.nivel_jerarquia) }}</span>
+                </div>
+                
+                <div class="node-details">
+                  <span class="area-badge">{{ node.data.area_departamento }}</span>
+                  @if (getSubordinadosCount(node.data) > 0) {
+                  <span class="subordinados-count">
+                    <i class="pi pi-users"></i>
+                    {{ getSubordinadosCount(node.data) }} subordinado(s)
+                  </span>
+                  }
+                </div>
+              </div>
+            </ng-template>
+          </p-tree>
+          }
+          
+          @if (!loading && organigramaData.length === 0) {
+          <div class="empty-state">
+            <i class="pi pi-sitemap text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-500 mb-2">No hay datos del organigrama</h3>
+            <p class="text-gray-400">Aún no se han creado puestos en la organización</p>
+          </div>
+          }
+        </div>
+      </p-card>
+    </div>
+    
+    <div class="lg:col-span-1">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-2 p-4">
+            <i class="pi pi-info-circle text-xl text-green-600"></i>
+            <span class="font-semibold text-lg">Detalles del Puesto</span>
+          </div>
+        </ng-template>
+        
+        @if (selectedPuesto) {
+        <div class="puesto-details">
+          <div class="detail-section mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">{{ selectedPuesto.nombre }}</h3>
+            @if (selectedPuesto.descripcion) {
+            <p class="text-gray-600 mb-4">
+              {{ selectedPuesto.descripcion }}
+            </p>
+            }
+            
+            <div class="status-badges mb-4">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                    [class.bg-green-100]="selectedPuesto.status === 'activo'"
+                    [class.text-green-800]="selectedPuesto.status === 'activo'"
+                    [class.bg-red-100]="selectedPuesto.status === 'inactivo'"
+                    [class.text-red-800]="selectedPuesto.status === 'inactivo'">
+                {{ getStatusLabel(selectedPuesto.status) }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="detail-section mb-6">
+            <h4 class="font-semibold text-gray-700 mb-3">Información Organizacional</h4>
+            
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Área/Departamento:</span>
+                <span class="info-value">{{ selectedPuesto.area_departamento }}</span>
+              </div>
+              
+              <div class="info-item">
+                <span class="info-label">Nivel Jerárquico:</span>
+                <span class="info-value">
+                  {{ selectedPuesto.nivel_jerarquia }} - {{ getLevelLabel(selectedPuesto.nivel_jerarquia) }}
+                </span>
+              </div>
+              
+              <div class="info-item">
+                <span class="info-label">Puesto Superior:</span>
+                <span class="info-value">{{ getPuestoSuperiorName(selectedPuesto) }}</span>
+              </div>
+              
+              <div class="info-item">
+                <span class="info-label">Subordinados:</span>
+                <span class="info-value">{{ getSubordinadosCount(selectedPuesto) }}</span>
+              </div>
+              
+              @if (selectedPuesto.fecha_creacion) {
+              <div class="info-item">
+                <span class="info-label">Fecha de Creación:</span>
+                <span class="info-value">{{ selectedPuesto.fecha_creacion | date:'dd/MM/yyyy' }}</span>
+              </div>
+              }
+            </div>
+          </div>
+          
+          @if (showActions && !readonly) {
+          <div class="actions-section">
+            <h4 class="font-semibold text-gray-700 mb-3">Acciones</h4>
+            
+            <div class="flex flex-col gap-2">
+              @if (canEdit()) {
+              <p-button
+                label="Editar Puesto" 
+                icon="pi pi-pencil" 
+                (onClick)="onEditPuesto()">
+              </p-button>
+              }
+              
+              @if (canAddSubordinado()) {
+              <p-button
+                label="Agregar Subordinado" 
+                icon="pi pi-plus" 
+                (onClick)="onAddSubordinado()">
+              </p-button>
+              }
+              
+              @if (canDelete()) {
+              <p-button
+                label="Eliminar Puesto" 
+                icon="pi pi-trash" 
+                (onClick)="onDeletePuesto()">
+              </p-button>
+              }
+            </div>
+          </div>
+          }
+        </div>
+        } @else {
+        <div class="no-selection-state">
+          <div class="text-center py-8">
+            <i class="pi pi-hand-point-up text-4xl text-gray-300 mb-4"></i>
+            <h3 class="text-lg font-semibold text-gray-500 mb-2">Selecciona un puesto</h3>
+            <p class="text-gray-400">Haz clic en cualquier puesto del organigrama para ver sus detalles</p>
+          </div>
+        </div>
+        }
+      </p-card>
+    </div>
+  </div>
+  
+  <div class="mt-6">
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="flex items-center gap-2 p-4">
+          <i class="pi pi-info text-xl text-blue-600"></i>
+          <span class="font-semibold text-lg">Leyenda</span>
+        </div>
+      </ng-template>
+      
+      <div class="legend-container">
+        <div class="legend-section">
+          <h4 class="font-semibold text-gray-700 mb-3">Niveles Jerárquicos</h4>
+          <div class="legend-items">
+            <div class="legend-item">
+              <i class="pi pi-crown text-yellow-500"></i>
+              <span>Nivel 1 - Directivo</span>
+            </div>
+            <div class="legend-item">
+              <i class="pi pi-star text-blue-500"></i>
+              <span>Nivel 2 - Gerencial</span>
+            </div>
+            <div class="legend-item">
+              <i class="pi pi-users text-green-500"></i>
+              <span>Nivel 3 - Supervisión</span>
+            </div>
+            <div class="legend-item">
+              <i class="pi pi-user text-gray-500"></i>
+              <span>Nivel 4+ - Operativo</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="legend-section">
+          <h4 class="font-semibold text-gray-700 mb-3">Estados</h4>
+          <div class="legend-items">
+            <div class="legend-item">
+              <div class="status-indicator bg-green-500"></div>
+              <span>Puesto Activo</span>
+            </div>
+            <div class="legend-item">
+              <div class="status-indicator bg-red-500"></div>
+              <span>Puesto Inactivo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>

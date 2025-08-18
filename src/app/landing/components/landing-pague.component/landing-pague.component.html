@@ -1,5 +1,7 @@
 <div class="min-h-screen bg-gray-50">
-  <app-nav-barcomponent></app-nav-barcomponent>
+  <app-nav-bar></app-nav-bar>
+
+  <p-toast></p-toast>
 
   <section class="py-12 sm:py-16 lg:py-20 px-4 animate-fade-in">
     <div class="container mx-auto text-center max-w-4xl">
@@ -16,6 +18,9 @@
         <p-button 
           label="Ver Demo" 
           [rounded]="true"
+          class="p-button-outlined p-button-lg"
+          (onClick)="onDemoClick()"
+          icon="pi pi-eye"
         >
         </p-button>
       </div>
@@ -67,6 +72,6 @@
     </div>
   </section>
 
-  <app-footercomponent></app-footercomponent>
+  <app-footer></app-footer>
 
 </div>

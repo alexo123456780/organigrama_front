@@ -1,0 +1,94 @@
+/* Estilos personalizados para el componente demo-view */
+
+.organigrama-container {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Estilos para el árbol del organigrama */
+::ng-deep .p-tree {
+  border: none;
+  background: transparent;
+}
+
+::ng-deep .p-tree .p-tree-container {
+  padding: 0;
+}
+
+::ng-deep .p-tree .p-treenode {
+  padding: 0.25rem 0;
+}
+
+::ng-deep .p-tree .p-treenode-content {
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
+}
+
+::ng-deep .p-tree .p-treenode-content:hover {
+  background-color: #f3f4f6;
+}
+
+::ng-deep .p-tree .p-treenode-content.p-highlight {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+::ng-deep .p-tree .p-tree-toggler {
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+
+::ng-deep .p-tree .p-tree-toggler:hover {
+  color: #374151;
+}
+
+/* Estilos para las tarjetas */
+::ng-deep .p-card {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+::ng-deep .p-card .p-card-header {
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Estilos para botones */
+::ng-deep .p-button {
+  transition: all 0.2s ease;
+}
+
+::ng-deep .p-button:hover {
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .organigrama-container {
+    max-height: 400px !important;
+  }
+  
+  ::ng-deep .p-card .p-card-body {
+    padding: 1rem;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.organigrama-container {
+  animation: fadeIn 0.3s ease-out;
+}

@@ -1,1 +1,303 @@
-<p>dashboard.component works!</p>
+<app-nav-bar></app-nav-bar>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="min-h-screen">
+  <div class="container">
+    <div class="dashboard-grid">
+    
+      <div class="dashboard-header">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1>Dashboard - Gestión de Puestos</h1>
+            <p>Administra la estructura organizacional de la empresa</p>
+          </div>
+          <div class="header-actions">
+            <p-button 
+              label="Ver Organigrama" 
+              icon="pi pi-sitemap" 
+              (onClick)="viewOrganigrama()">
+            </p-button>
+            <p-button 
+              label="Cerrar Sesión" 
+              severity="info"
+              icon="pi pi-sign-out" 
+              (onClick)="logout()">
+            </p-button>
+          </div>
+        </div>
+      </div>
+
+      <p-toolbar>
+        <div class="p-toolbar-group-start">
+          @if (canEdit()) {
+            <p-button 
+              label="Nuevo Puesto" 
+              icon="pi pi-plus" 
+              class="p-button-success"
+              (onClick)="openNew()">
+            </p-button>
+          }
+        </div>
+        
+        <div class="p-toolbar-group-end">
+          <div class="stats-badge">
+            <i class="pi pi-chart-bar mr-2"></i>
+            <span>
+              Total de puestos: {{ puestos.length }}
+            </span>
+          </div>
+        </div>
+      </p-toolbar>
+
+      <p-card header="Lista de Puestos">
+      <p-table 
+        #dt
+        [value]="puestos" 
+        [loading]="loading"
+        [paginator]="true" 
+        [rows]="10"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} puestos"
+        [globalFilterFields]="['nombre', 'area_departamento', 'status']"
+        >
+        
+        <ng-template pTemplate="caption">
+          <div class="table-header">
+            <h3>Lista de Puestos</h3>
+
+            <p-iconfield>
+              <p-inputicon class="pi pi-search" />
+              <input 
+                pInputText 
+                type="text" 
+                placeholder="Buscar puestos..."
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')">
+            </p-iconfield>
+
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="nombre">
+              Nombre del Puesto
+              <p-sortIcon field="nombre"></p-sortIcon>
+            </th>
+            <th pSortableColumn="area_departamento">
+              Área/Departamento
+              <p-sortIcon field="area_departamento"></p-sortIcon>
+            </th>
+            <th pSortableColumn="nivel_jerarquia">
+              Nivel Jerárquico
+              <p-sortIcon field="nivel_jerarquia"></p-sortIcon>
+            </th>
+            <th pSortableColumn="status">
+              Estado
+              <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-puesto>
+          <tr>
+            <td>
+              <div>
+                <div>{{ puesto.nombre }}</div>
+                @if (puesto.descripcion) {
+                  <div>
+                    {{ puesto.descripcion | slice:0:50 }}{{ puesto.descripcion?.length > 50 ? '...' : '' }}
+                  </div>
+                }
+              </div>
+            </td>
+            <td>{{ puesto.area_departamento }}</td>
+            <td>
+              <span class="level-badge">
+                Nivel {{ puesto.nivel_jerarquia }}
+              </span>
+            </td>
+            <td>
+              <p-tag 
+                [value]="puesto.status === 'activo' ? 'Activo' : 'Inactivo'"
+                [severity]="puesto.status === 'activo' ? 'success' : 'danger'">
+              </p-tag>
+            </td>
+            <td>
+               <div class="action-buttons">
+                 @if (canEdit()) {
+                     <p-button 
+                       icon="pi pi-pencil" 
+                       (onClick)="editPuesto(puesto)">
+                     </p-button>
+                   }
+                   @if (canDelete()) {
+                     <p-button 
+                       icon="pi pi-trash" 
+                       (onClick)="deletePuesto(puesto)">
+                     </p-button>
+                   }
+               </div>
+             </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5" class="empty-state">
+              <div>
+                <i class="pi pi-info-circle"></i>
+                <p>No se encontraron puestos</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+
+    </div>
+  </div>
+</div>
+
+<p-dialog 
+  [(visible)]="puestoDialog" 
+  [header]="isEditing ? 'Editar Puesto' : 'Nuevo Puesto'"
+  [modal]="true" 
+  [style]="{width: '600px'}"
+  [closable]="true"
+  [draggable]="false"
+  [resizable]="false">
+  
+  <form [formGroup]="puestoForm" (ngSubmit)="savePuesto()">
+    <div class="grid grid-cols-1 gap-6">
+      
+      <div class="field">
+        <label for="nombre">
+          Nombre del Puesto *
+        </label>
+        <input 
+          id="nombre"
+          type="text" 
+          pInputText 
+          formControlName="nombre"
+          placeholder="Ej: Director General, Gerente de Ventas..."
+          class="w-full"
+          [class.ng-invalid]="puestoForm.get('nombre')?.invalid && puestoForm.get('nombre')?.touched">
+        @if (puestoForm.get('nombre')?.invalid && puestoForm.get('nombre')?.touched) {
+          <small class="p-error">
+            El nombre es requerido (mínimo 3 caracteres)
+          </small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="descripcion">
+          Descripción
+        </label>
+        <textarea 
+          id="descripcion"
+          pInputTextarea 
+          formControlName="descripcion"
+          placeholder="Descripción detallada del puesto..."
+          rows="3"
+          class="w-full">
+        </textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="field">
+          <label for="area">
+            Área/Departamento *
+          </label>
+          <p-select 
+            id="area"
+            formControlName="area_departamento"
+            [options]="areaOptions"
+            placeholder="Seleccionar área"
+            [editable]="true"
+            class="w-full"
+            [class.ng-invalid]="puestoForm.get('area_departamento')?.invalid && puestoForm.get('area_departamento')?.touched">
+          </p-select>
+          @if (puestoForm.get('area_departamento')?.invalid && puestoForm.get('area_departamento')?.touched) {
+            <small class="p-error">
+              El área es requerida
+            </small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="nivel">
+            Nivel Jerárquico *
+          </label>
+          <p-inputNumber 
+            id="nivel"
+            formControlName="nivel_jerarquia"
+            [min]="1"
+            [max]="10"
+            placeholder="1"
+            class="w-full"
+            [class.ng-invalid]="puestoForm.get('nivel_jerarquia')?.invalid && puestoForm.get('nivel_jerarquia')?.touched">
+          </p-inputNumber>
+          @if (puestoForm.get('nivel_jerarquia')?.invalid && puestoForm.get('nivel_jerarquia')?.touched) {
+              <small class="p-error">
+                El nivel jerárquico es requerido
+              </small>
+            }
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="field">
+          <label for="superior">
+            Puesto Superior
+          </label>
+          <p-select 
+            id="superior"
+            formControlName="puesto_superior_id"
+            [options]="puestosSuperiorOptions"
+            placeholder="Seleccionar puesto superior"
+            class="w-full">
+          </p-select>
+        </div>
+
+        @if (isEditing) {
+          <div class="field">
+            <label for="status">
+              Estado
+            </label>
+            <p-select 
+              id="status"
+              formControlName="status"
+              [options]="statusOptions"
+              placeholder="Seleccionar estado"
+              class="w-full">
+            </p-select>
+          </div>
+        }
+      </div>
+
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3">
+      <p-button 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        class="p-button-text"
+        (onClick)="hideDialog()">
+      </p-button>
+      <p-button 
+        label="Guardar" 
+        icon="pi pi-check" 
+        class="p-button-success"
+        (onClick)="savePuesto()"
+        [disabled]="puestoForm.invalid">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<app-footer></app-footer>

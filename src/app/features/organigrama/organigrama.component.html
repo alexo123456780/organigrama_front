@@ -1,0 +1,65 @@
+<app-nav-bar></app-nav-bar>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="min-h-screen organigrama-page">
+  <div class="container">
+    
+    <div class="organigrama-page-header">
+      <div class="header-content">
+        <div class="header-text">
+          <h1>Organigrama Empresarial</h1>
+          <p>Visualización completa de la estructura organizacional</p>
+        </div>
+        
+        <div class="header-actions">
+          @if (userRole === UserRole.Administrador || userRole === UserRole.Editor) {
+            <p-button 
+              label="Ir al Dashboard" 
+              icon="pi pi-th-large" 
+              (onClick)="goToDashboard()">
+            </p-button>
+          }
+          
+          <p-button 
+            label="Cerrar Sesión" 
+            icon="pi pi-sign-out" 
+            (onClick)="logout()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+
+    <app-organigrama-view
+      [readonly]="isReadonly"
+      [showActions]="!isReadonly"
+      (editPuesto)="onEditPuesto($event)"
+      (deletePuesto)="onDeletePuesto($event)"
+      (addSubordinado)="onAddSubordinado($event)">
+    </app-organigrama-view>
+
+    @if (userRole === UserRole.Viewer) {
+      <div class="viewer-info-section">
+        <div class="info-card">
+          <div class="info-content">
+            <div class="info-icon">
+              <i class="pi pi-info-circle"></i>
+            </div>
+            <div class="info-text">
+              <h3>Modo de Solo Lectura</h3>
+              <p>
+                Estás viendo el organigrama en modo de solo lectura. 
+                ya que estas como modo visualizador
+                
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>
+
+<app-footer></app-footer>

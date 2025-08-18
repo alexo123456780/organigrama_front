@@ -170,12 +170,5 @@
 </div>
 
 <app-spinnercomponent [estaCargando]="estaCargando" />
-@if(mensajeErroneo$ | async; as mensajeErroneo ) {
 
-<app-modal-errorcomponent [mensajeErroneo]="mensajeErroneo" />
 
-} @if (mensajeExitoso$ | async; as mensajeExitoso) {
-
-<app-modal-exitocomponent [mensajeExitoso]="mensajeExitoso" />
-
-}

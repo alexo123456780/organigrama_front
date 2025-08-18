@@ -1,0 +1,84 @@
+Requerimiento del Sistema: Gestión de Organigrama Empresarial
+
+1. Descripción General
+
+El sistema permitirá administrar la estructura organizacional de una empresa, permitiendo
+crear, modificar, dar de baja y visualizar los puestos jerárquicos de la organización a
+través de una interfaz amigable. El sistema contará con un backend robusto y un frontend
+interactivo, así como una base de datos para almacenar la información.
+
+
+
+2. Requerimientos Funcionales
+
+2.1 Gestión de Puestos (CRUD)
+
+   •   Alta de puesto:
+          o Nombre del puesto
+          o Descripción
+          o Nivel jerárquico
+          o Área/departamento
+          o Puesto superior inmediato (relación padre)
+          o Estatus (activo/inactivo)
+   •   Modificación de puesto:
+          o Cambiar nombre, descripción, jerarquía o dependencia
+   •   Baja lógica del puesto:
+          o Marcar como "inactivo" sin eliminarlo físicamente de la base de datos
+   •   Consulta de puesto:
+          o Listado de puestos activos/inactivos
+          o Filtros por departamento, nivel jerárquico, nombre, etc.
+
+2.2 Visualización del Organigrama
+
+   •   Generación de organigrama jerárquico en forma gráfica (tipo árbol)
+   •   Expansión/colapso de nodos por jerarquía
+   •   Mostrar información de cada puesto al hacer clic
+
+2.3 Relación entre Puestos
+
+   •   Relación 1:N (un jefe puede tener varios subordinados)
+   •   Visualización de relaciones en la estructura
+   •   Validación para evitar ciclos jerárquicos
+
+2.4 Auditoría(opcional)
+
+   •   Registro de fecha de creación/modificación/baja lógica
+   •   Usuario que realiza cada acción
+3. Requerimientos Técnicos
+
+3.1 Frontend( se indican ejemplos de lenguajes a usar )
+
+   •   Framework: Angular / React / Vue / PHP /
+   •   Funcionalidad:
+          o Formularios para CRUD
+          o Gráfica del organigrama
+          o Validaciones en el cliente (opcional)
+   •   Accesibilidad y diseño responsivo
+
+3.2 Backend
+
+   •   Lenguaje: Node.js / .NET / Java / Python (según preferencia)
+   •   API REST para:
+          o Alta, baja lógica, modificación y consulta de puestos
+          o Obtener estructura jerárquica
+   •   Autenticación y autorización de usuarios (JWT / OAuth)(opcional)
+
+3.3 Base de Datos
+
+   •   Motor: PostgreSQL / MySQL / SQL Server
+
+3.4 Seguridad (opcional)
+
+   •   Control de roles (administrador, visualizador, editor)
+   •   Validación en backend para proteger integridad de datos
+
+
+
+4. Consideraciones Adicionales
+
+   •   Posibilidad de importar/exportar estructura organizacional en Excel/PDF
+   •   Control de versiones de la estructura organizacional
+   •   Posibilidad de asociar personas a los puestos (opcional)
+   •   Se deja a consideración del implementador usar sus ideas y agregar funcionalidades
+       que llamen la atencion
+

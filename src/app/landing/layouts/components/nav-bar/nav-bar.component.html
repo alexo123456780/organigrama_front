@@ -1,0 +1,54 @@
+<header>
+    <div class="max-w-7xl mx-auto container">
+        <div class="flex justify-between items-center">
+            <div class="logo-section">
+                <i class="pi pi-sitemap"></i>
+                <div>
+                    <h1>OrganiGrama</h1>
+                    <p>Sistema de Gestión Organizacional</p>
+                </div>
+            </div>
+
+            <div class="sm:hidden block">
+                <h1 class="font-serif font-bold text-lg text-gray-900">Organigrama</h1>
+            </div>
+
+            @if (showLoginButton) {
+                <div class="hidden md:block">
+                    <p-button
+                        severity="info"
+                        label="Iniciar Sesión"
+                        [rounded]="true"
+                        class="transition-transform duration-200 hover:scale-105"
+                        (click)="routeLogin()"
+                        >
+                        
+                    </p-button>
+                </div>
+            }
+
+            <button 
+                class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                (click)="toggleMobileMenu()"
+                [attr.aria-expanded]="isMobileMenuOpen"
+                aria-label="Menú de navegación">
+                <i class="pi text-gray-600 text-xl" [ngClass]="isMobileMenuOpen ? 'pi-times' : 'pi-bars'"></i>
+            </button>
+        </div>
+
+        @if (showLoginButton) {
+            <div class="md:hidden overflow-hidden transition-all duration-300 ease-in-out" 
+                 [ngClass]="isMobileMenuOpen ? 'max-h-32 mt-4' : 'max-h-0'">
+                <div class="py-4 border-t border-gray-200">
+                    <p-button
+                        severity="info"
+                        label="Iniciar Sesión"
+                        [rounded]="true"
+                        class="w-full transition-transform duration-200 hover:scale-105"
+                        (click)="routeLogin()">
+                    </p-button>
+                </div>
+            </div>
+        }
+    </div>
+</header>

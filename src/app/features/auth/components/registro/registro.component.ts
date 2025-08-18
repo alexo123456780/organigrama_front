@@ -8,15 +8,22 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { UserRole } from '../../models/usuario';
 import { SelectModule } from 'primeng/select';
-import { MensajeService } from '../../../../services/mensaje.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { RegistroRequest } from '../../models/usuario.request';
 import { RegistroService } from '../../services/registro.service';
+import { ValidationService } from '../../../../core/services/validation.service';
+import { CustomValidators } from '../../../../core/validators/custom-validators';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { MessageModule } from 'primeng/message';
+import { ButtonModule } from 'primeng/button';
+import { SpinnerComponent } from '../../../../shared/components/spinner/spinner.component';
+import { ModalErrorComponent } from '../../../../shared/components/modal-error/modal-error.component';
+import { ModalExitoComponent } from '../../../../shared/components/modal-exito/modal-exito.component';
 
 @Component({
   selector: 'app-registrocomponent',
-  standalone:true,
-  imports: 
-  [
+  standalone: true,
+  imports: [
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
@@ -26,7 +33,12 @@ import { RegistroService } from '../../services/registro.service';
     IconFieldModule,
     InputIconModule,
     SelectModule,
-
+    FloatLabelModule,
+    MessageModule,
+    ButtonModule,
+    SpinnerComponent,
+    ModalErrorComponent,
+    ModalExitoComponent
   ],
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
@@ -37,99 +49,97 @@ export class RegistroComponent {
   roles = Object.values(UserRole);
   request: RegistroRequest | null = null;
 
-  private messajeService = inject(MensajeService);
+  private notificationService = inject(NotificationService);
   private router = inject(Router);
+  private validationService = inject(ValidationService);
 
-  mensajeErroneo$ = this.messajeService.observableError;
-  mensajeExitoso$ = this.messajeService.setMensajeExitoso;
+  mensajeErroneo$ = this.notificationService.observableError;
+  mensajeExitoso$ = this.notificationService.observableExito;
 
   formularioRegistro: FormGroup;
 
-  constructor(private fb: FormBuilder, private registroService:RegistroService){
-
+  constructor(private fb: FormBuilder, private registroService: RegistroService) {
     this.formularioRegistro = this.fb.group({
-
-      userName: ['',[Validators.required,Validators.maxLength(50)]],
-      password: ['',[Validators.required,Validators.minLength(4)]],
-      rol: ['']
-
-    })
-
+      userName: [
+        '', 
+        [
+          Validators.required,
+          Validators.maxLength(50),
+          Validators.minLength(3),
+          CustomValidators.username,
+          CustomValidators.noWhitespace
+        ]
+      ],
+      password: [
+        '', 
+        [
+          Validators.required,
+          Validators.minLength(6),
+          CustomValidators.noWhitespace
+        ]
+      ],
+      confirmPassword: [
+        '',
+        [
+          Validators.required,
+          CustomValidators.confirmPassword('password')
+        ]
+      ],
+      rol: ['', Validators.required]
+    });
   }
 
 
-  validarFormulario(): boolean{
-
-    if(this.formularioRegistro.valid){
-
-      this.request = 
-      {
-
+  validarFormulario(): boolean {
+    const validation = this.validationService.validateForm(this.formularioRegistro);
+    
+    if (!validation.isValid && validation.firstError) {
+      this.notificationService.error(validation.firstError.message);
+      return false;
+    }
+    
+    if (this.formularioRegistro.valid) {
+      this.request = {
         userName: this.formularioRegistro.get('userName')?.value,
         password: this.formularioRegistro.get('password')?.value,
         rol: this.formularioRegistro.get('rol')?.value
-
-      }
-
+      };
       return true;
-
-    }else{
-
-      this.messajeService.setMensajeErroneo('Formulario Invalido, Verifique que sus datos sean correctos');
-
-      return false;
-
     }
-
+    
+    return false;
   }
 
 
-  registro(): void{
+  registro(): void {
+    // Limpiar espacios en blanco
+    this.validationService.trimFormValues(this.formularioRegistro, ['userName', 'password', 'confirmPassword']);
+    
+    if (!this.validarFormulario()) return;
 
-    if(!this.validarFormulario()) return;
-
-    try{
-
-    if(this.request){
-
+    if (this.request) {
       this.estaCargando = true;
 
       this.registroService.registro(this.request).subscribe({
-
-        next:() =>{
-
+        next: () => {
           this.estaCargando = false;
-
-          this.messajeService.setMensajeExitoso('Registro Exitoso');
-
-          setTimeout(() =>{
-
-            this.router.navigate(['/login'])
-
-          },1800)
-    
+          this.notificationService.success(
+            `¡Registro exitoso! Usuario ${this.request?.userName} creado correctamente`
+          );
+          
+          // Resetear formulario usando el servicio de validación
+          this.validationService.resetForm(this.formularioRegistro);
+          
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 2000);
         },
-
-        error:(error) =>{
-
+        error: () => {
+          // El error ya se maneja en el interceptor
           this.estaCargando = false;
-
-          this.messajeService.setMensajeErroneo(error);
-
-
         }
-      })
-
+      });
     }
-
-    }catch(error){
-
-      this.messajeService.setMensajeErroneo(String(error));
-
-
-    }
-
-    
   }
 
 }

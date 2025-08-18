@@ -1,16 +1,51 @@
 import { Routes } from '@angular/router';
-import { LandingPagueComponent } from './landing/components/landing-pague.component/landing-pague.component';
-import { LoginComponent } from './features/auth/components/login/login.component';
-import { DashboardComponent } from './features/dashboard/components/dashboard/dashboard.component';
-import { UserGuard } from './core/guards/user.guard';
+import { RoleGuard } from './core/guards/role.guard';
+import { UserRole } from './features/auth/models/usuario';
+import { RegistroComponent } from './features/auth/components/registro/registro.component';
 
-export const routes: Routes = 
-[
+export const routes: Routes = [
 
-    {path: '' , redirectTo : '/landing' , pathMatch: 'full'},
-    {path:'landing',component:LandingPagueComponent},
-    {path:'login',component: LoginComponent},
-    {path:'dashboard', component:DashboardComponent, canActivate:[UserGuard]},
+    {
+        path: '',
+        redirectTo: '/landing',
+        pathMatch: 'full'
+    },
+    {
+        path: 'landing',
+        loadComponent: () => import('./landing/components/landing-pague.component/landing-pague.component').then(m => m.LandingPagueComponent)
+    },
+    {
+        path: 'login',
+        loadComponent: () => import('./features/auth/components/login/login.component').then(m => m.LoginComponent)
+    },
+    {
+        path: 'dashboard',
+        loadComponent: () => import('./features/dashboard/components/dashboard/dashboard.component').then(m => m.DashboardComponent),
+        canActivate: [RoleGuard],
+        data: { allowedRoles: [UserRole.Administrador, UserRole.Editor] }
+    },
+    {
+        path: 'demo',
+        loadComponent: () => import('./features/organigrama/components/demo-view/demo-view.component').then(m => m.DemoViewComponent),
+        canActivate: [RoleGuard],
+        data: { allowedRoles: [UserRole.Viewer] }
+    },
+    {
+        path: 'organigrama',
+        loadComponent: () => import('./features/organigrama/organigrama.component').then(m => m.OrganigramaComponent),
+        canActivate: [RoleGuard],
+        data: { allowedRoles: [UserRole.Administrador, UserRole.Editor, UserRole.Viewer] }
+    },
 
+    {
+        path:'registro',
+        component: RegistroComponent,
+    },
+
+
+    {
+        path: '**',
+        redirectTo: '/landing'
+    }
 
 ];

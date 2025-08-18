@@ -1,7 +1,7 @@
 import { Inject, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { STORAGE_KEYS } from "../constants/storage";
-import { MensajeService } from "../../services/mensaje.service";
+import { NotificationService } from "../services/notification.service";
 
 export const UserGuard = () =>{
 
@@ -9,12 +9,12 @@ export const UserGuard = () =>{
 
     const router = inject(Router);
 
-    const messageService = inject(MensajeService);
+    const notificationService = inject(NotificationService);
 
 
     if(!token){
 
-        messageService.setMensajeErroneo('Debes de iniciar sesion para poder acceder a esta ruta');
+        notificationService.error('Debes de iniciar sesión para poder acceder a esta ruta');
 
         router.navigate(['/login']);
 

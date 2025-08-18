@@ -1,0 +1,117 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="container mx-auto px-4">
+    
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-800 mb-4">Vista Demo - Organigrama</h1>
+      <p class="text-lg text-gray-600">Explora la estructura organizacional de la empresa</p>
+    </div>
+
+    <!-- Controles -->
+    <div class="flex justify-center gap-4 mb-6">
+      <p-button 
+        label="Expandir Todo" 
+        icon="pi pi-plus" 
+        (onClick)="expandAll()"
+        class="p-button-outlined">
+      </p-button>
+      <p-button 
+        label="Contraer Todo" 
+        icon="pi pi-minus" 
+        (onClick)="collapseAll()"
+        class="p-button-outlined">
+      </p-button>
+    </div>
+
+    <!-- Organigrama -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Árbol del Organigrama -->
+      <div class="lg:col-span-2">
+        <p-card header="Estructura Organizacional" class="h-full">
+          <div class="organigrama-container" style="max-height: 600px; overflow-y: auto;">
+            <p-tree 
+              [value]="organigramaData" 
+              [loading]="loading"
+              selectionMode="single"
+              [(selection)]="selectedNode"
+              (onNodeSelect)="onNodeSelect($event)"
+              class="w-full">
+            </p-tree>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Detalles del Puesto Seleccionado -->
+      <div class="lg:col-span-1">
+        <p-card header="Detalles del Puesto" class="h-full">
+          @if (selectedNode) {
+          <div class="space-y-4">
+            <div>
+              <label class="font-semibold text-gray-700">Nombre del Puesto:</label>
+              <p class="text-gray-900 mt-1">{{ selectedNode.data.nombre }}</p>
+            </div>
+            
+            @if (selectedNode.data.descripcion) {
+            <div>
+              <label class="font-semibold text-gray-700">Descripción:</label>
+              <p class="text-gray-900 mt-1">{{ selectedNode.data.descripcion }}</p>
+            </div>
+            }
+            
+            <div>
+              <label class="font-semibold text-gray-700">Nivel Jerárquico:</label>
+              <p class="text-gray-900 mt-1">{{ selectedNode.data.nivel_jerarquia }}</p>
+            </div>
+            
+            @if (selectedNode.data.area_departamento) {
+            <div>
+              <label class="font-semibold text-gray-700">Área/Departamento:</label>
+              <p class="text-gray-900 mt-1">{{ selectedNode.data.area_departamento }}</p>
+            </div>
+            }
+            
+            <div>
+              <label class="font-semibold text-gray-700">Estado:</label>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mt-1"
+                    [ngClass]="{
+                      'bg-green-100 text-green-800': selectedNode.data.status === 'activo',
+                      'bg-red-100 text-red-800': selectedNode.data.status === 'inactivo'
+                    }">
+                {{ selectedNode.data.status === 'activo' ? 'Activo' : 'Inactivo' }}
+              </span>
+            </div>
+          </div>
+          } @else {
+            <div class="text-center text-gray-500 py-8">
+              <i class="pi pi-info-circle text-4xl mb-4"></i>
+              <p>Selecciona un puesto del organigrama para ver sus detalles</p>
+            </div>
+          }
+        </p-card>
+      </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="mt-8">
+      <p-card>
+        <div class="text-center">
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">¿Necesitas más acceso?</h3>
+          <p class="text-gray-600 mb-4">
+            Esta es una vista de solo lectura. Para gestionar el organigrama, contacta al administrador.
+          </p>
+          <p-button 
+            label="Contactar Administrador" 
+            icon="pi pi-envelope" 
+            class="p-button-outlined">
+          </p-button>
+        </div>
+      </p-card>
+    </div>
+
+  </div>
+</div>
+
+<app-footer></app-footer>
